@@ -1,6 +1,7 @@
 package br.com.caelum.ingresso.controller;
 
 import br.com.caelum.ingresso.dao.SalaDao;
+import br.com.caelum.ingresso.dao.SessaoDao;
 import br.com.caelum.ingresso.model.Sala;
 import br.com.caelum.ingresso.model.form.SalaForm;
 
@@ -19,7 +20,10 @@ import java.util.Optional;
  */
 @Controller
 public class SalaController {
-
+	
+	@Autowired
+	private SessaoDao sessaoDao;
+	
     @Autowired
     private SalaDao salaDao;
 
@@ -65,6 +69,7 @@ public class SalaController {
         Sala sala = salaDao.findOne(id);
 
         ModelAndView view = new ModelAndView("sessao/lista");
+        view.addObject("sessoes", sessaoDao.buscaSessoesDaSala(sala));
         view.addObject("sala", sala);
 
         return view;
@@ -80,8 +85,7 @@ public class SalaController {
 
         return modelAndView;
     }
-
-
+    
     @DeleteMapping("/admin/sala/{id}")
     @ResponseBody
     @Transactional
